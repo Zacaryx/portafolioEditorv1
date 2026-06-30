@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eduardo Vargas | Editor de Videos Gaming</title>
+    <title>Eduardo Vargas | Gaming Video Editor</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
         
@@ -48,6 +48,13 @@
             text-decoration: none;
             white-space: nowrap;
         }
+
+        /* nav right side: links + lang switcher */
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
         
         .nav-links {
             display: flex;
@@ -62,6 +69,39 @@
         }
         
         .nav-links a:hover { color: var(--primary); }
+
+        /* ── LANG SWITCHER ── */
+        .lang-switcher {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 50px;
+            padding: 3px 4px;
+            flex-shrink: 0;
+        }
+
+        .lang-switcher button {
+            background: none;
+            border: none;
+            color: #888;
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            padding: 4px 10px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .lang-switcher button:hover { color: #fff; }
+
+        .lang-switcher button.lang-active {
+            background: var(--primary);
+            color: #000;
+        }
 
         /* hamburger */
         .hamburger {
@@ -147,12 +187,8 @@
             margin: 0 auto;
         }
 
-        /* portfolio is the first section after header — needs extra top padding */
-        #portfolio {
-            padding-top: 130px;
-        }
+        #portfolio { padding-top: 130px; }
 
-        /* sections that need full-width bg */
         .about-wrap, .services-wrap {
             background: var(--gray);
         }
@@ -218,11 +254,8 @@
         
         .video-card:hover { transform: translateY(-8px); }
 
-        .video-card.hidden {
-            display: none;
-        }
+        .video-card.hidden { display: none; }
 
-        /* responsive iframe wrapper — 16:9 */
         .video-wrapper {
             position: relative;
             padding-bottom: 56.25%;
@@ -238,7 +271,6 @@
             border: none;
         }
 
-        /* video link & audio notice */
         .video-link {
             display: inline-flex;
             align-items: center;
@@ -258,7 +290,6 @@
             font-style: italic;
         }
 
-        /* YouTube thumbnail click-to-play */
         .yt-thumb {
             position: absolute;
             inset: 0;
@@ -431,13 +462,16 @@
                 border-bottom: 1px solid #1a1a1a;
             }
 
+            /* on mobile the lang switcher stays visible beside hamburger */
+            .nav-right {
+                gap: 1rem;
+            }
+
             header { position: relative; }
 
             .hero { height: auto; min-height: 100svh; padding-top: 20px; }
 
-            .portfolio-grid {
-                grid-template-columns: 1fr;
-            }
+            .portfolio-grid { grid-template-columns: 1fr; }
 
             .contact-info { flex-direction: column; align-items: center; gap: 1.2rem; }
 
@@ -455,44 +489,50 @@
     <header>
         <nav>
             <a href="#" class="logo">EDUARDO VARGAS</a>
-            <button class="hamburger" aria-label="Menú" onclick="toggleMenu()">
-                <span></span><span></span><span></span>
-            </button>
-            <div class="nav-links" id="navLinks">
-                <a href="#about" onclick="closeMenu()">Sobre mí</a>
-                <a href="#portfolio" onclick="closeMenu()">Portafolio</a>
-                <a href="#services" onclick="closeMenu()">Servicios</a>
-                <a href="#contact" onclick="closeMenu()">Contacto</a>
+            <div class="nav-right">
+                <button class="hamburger" aria-label="Menu" onclick="toggleMenu()">
+                    <span></span><span></span><span></span>
+                </button>
+                <div class="nav-links" id="navLinks">
+                    <a href="#about" onclick="closeMenu()" id="nav-about">About me</a>
+                    <a href="#portfolio" onclick="closeMenu()" id="nav-portfolio">Portfolio</a>
+                    <a href="#services" onclick="closeMenu()" id="nav-services">Services</a>
+                    <a href="#contact" onclick="closeMenu()" id="nav-contact">Contact</a>
+                </div>
+                <div class="lang-switcher">
+                    <button id="btn-en" onclick="switchLanguage('en')">EN</button>
+                    <button id="btn-es" onclick="switchLanguage('es')">ES</button>
+                </div>
             </div>
         </nav>
     </header>
 
     <section id="portfolio">
-        <h2>Portafolio</h2>
+        <h2 id="portfolio-title">Portfolio</h2>
 
         <div class="portfolio-filters">
-            <button class="filter-btn active" onclick="filterVideos('all', this)">Todos</button>
-            <button class="filter-btn" onclick="filterVideos('largo', this)">Videos Largos</button>
-            <button class="filter-btn" onclick="filterVideos('corto', this)">Videos Cortos</button>
+            <button id="filter-all" class="filter-btn active" onclick="filterVideos('all', this)">All</button>
+            <button id="filter-long" class="filter-btn" onclick="filterVideos('largo', this)">Long Videos</button>
+            <button id="filter-short" class="filter-btn" onclick="filterVideos('corto', this)">Short Videos</button>
         </div>
 
         <div class="portfolio-grid" id="portfolioGrid">
 
-            <!-- Steam Machine — Más Reciente -->
+            <!-- Steam Machine — Most Recent -->
             <div class="video-card" data-type="corto">
                 <div class="video-wrapper">
                     <div class="yt-thumb" data-id="KaL8zeRdK7o">
-                        <img src="https://i.ytimg.com/vi/KaL8zeRdK7o/hqdefault.jpg" alt="Steam Machine Noticia" loading="lazy">
-                        <button class="yt-play" aria-label="Reproducir"></button>
+                        <img src="https://i.ytimg.com/vi/KaL8zeRdK7o/hqdefault.jpg" alt="Steam Machine News" loading="lazy">
+                        <button class="yt-play" aria-label="Play"></button>
                     </div>
                 </div>
                 <div class="video-info">
-                    <h3>Steam Machine Noticia</h3>
-                    <p>Short viral con edición rápida y atractiva.</p>
-                    <span class="video-tag tag-corto">Video Corto</span>
-                    <span class="video-tag tag-nuevo">🔥 Más Reciente</span>
-                    <a class="video-link" href="https://www.youtube.com/watch?v=KaL8zeRdK7o" target="_blank" rel="noopener">▶ Ver en YouTube</a>
-                    <span class="audio-notice">🎵 El audio utilizado no es de mi autoría.</span>
+                    <h3 id="card1-title">Steam Machine News</h3>
+                    <p id="card1-desc">Viral short with fast and eye-catching editing.</p>
+                    <span id="card1-tag" class="video-tag tag-corto">Short Video</span>
+                    <span id="card1-new" class="video-tag tag-nuevo">🔥 Most Recent</span>
+                    <a id="card1-link" class="video-link" href="https://www.youtube.com/watch?v=KaL8zeRdK7o" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+                    <span id="card1-audio" class="audio-notice">🎵 The audio used is not authored by me.</span>
                 </div>
             </div>
 
@@ -501,16 +541,16 @@
                 <div class="video-wrapper">
                     <div class="yt-thumb" data-id="Rv6khHGlmKY">
                         <img src="https://i.ytimg.com/vi/Rv6khHGlmKY/hqdefault.jpg" alt="Steal a Brainrot" loading="lazy">
-                        <button class="yt-play" aria-label="Reproducir"></button>
+                        <button class="yt-play" aria-label="Play"></button>
                     </div>
                 </div>
                 <div class="video-info">
-                    <h3>Steal a Brainrot Noticia Roblox</h3>
-                    <p>Short viral estilo noticias gaming con edición rápida y humor brainrot.</p>
-                    <span class="video-tag tag-corto">Video Corto</span>
-                    <span class="video-tag tag-nuevo">🔥 Más Reciente</span>
-                    <a class="video-link" href="https://www.youtube.com/watch?v=Rv6khHGlmKY" target="_blank" rel="noopener">▶ Ver en YouTube</a>
-                    <span class="audio-notice">🎵 El audio utilizado no es de mi autoría.</span>
+                    <h3 id="card2-title">Steal a Brainrot Roblox News</h3>
+                    <p id="card2-desc">Viral gaming-news style short with fast editing and brainrot humor.</p>
+                    <span id="card2-tag" class="video-tag tag-corto">Short Video</span>
+                    <span id="card2-new" class="video-tag tag-nuevo">🔥 Most Recent</span>
+                    <a id="card2-link" class="video-link" href="https://www.youtube.com/watch?v=Rv6khHGlmKY" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+                    <span id="card2-audio" class="audio-notice">🎵 The audio used is not authored by me.</span>
                 </div>
             </div>
 
@@ -518,16 +558,16 @@
             <div class="video-card" data-type="largo">
                 <div class="video-wrapper">
                     <div class="yt-thumb" data-id="00bd2DNd5Ik">
-                        <img src="https://i.ytimg.com/vi/00bd2DNd5Ik/hqdefault.jpg" alt="Edición Larga PVZ" loading="lazy">
-                        <button class="yt-play" aria-label="Reproducir"></button>
+                        <img src="https://i.ytimg.com/vi/00bd2DNd5Ik/hqdefault.jpg" alt="Long Edit PVZ" loading="lazy">
+                        <button class="yt-play" aria-label="Play"></button>
                     </div>
                 </div>
                 <div class="video-info">
-                    <h3>Ejemplo de Edición Larga Inspirada en Grandes Youtubers de PVZ</h3>
-                    <p>Edición cinematográfica con estilo de los mejores creadores de contenido de Plants vs Zombies.</p>
-                    <span class="video-tag tag-largo">Video Largo</span>
-                    <span class="video-tag tag-nuevo">🔥 Más Reciente</span>
-                    <a class="video-link" href="https://www.youtube.com/watch?v=00bd2DNd5Ik" target="_blank" rel="noopener">▶ Ver en YouTube</a>
+                    <h3 id="card3-title">Long Edit Example Inspired by Top PVZ YouTubers</h3>
+                    <p id="card3-desc">Cinematic editing in the style of the best Plants vs Zombies content creators.</p>
+                    <span id="card3-tag" class="video-tag tag-largo">Long Video</span>
+                    <span id="card3-new" class="video-tag tag-nuevo">🔥 Most Recent</span>
+                    <a id="card3-link" class="video-link" href="https://www.youtube.com/watch?v=00bd2DNd5Ik" target="_blank" rel="noopener">▶ Watch on YouTube</a>
                 </div>
             </div>
 
@@ -536,14 +576,14 @@
                 <div class="video-wrapper">
                     <div class="yt-thumb" data-id="9P78RXwcFlY">
                         <img src="https://i.ytimg.com/vi/9P78RXwcFlY/hqdefault.jpg" alt="Vtuber Minecraft Gameplay" loading="lazy">
-                        <button class="yt-play" aria-label="Reproducir"></button>
+                        <button class="yt-play" aria-label="Play"></button>
                     </div>
                 </div>
                 <div class="video-info">
-                    <h3>Vtuber Minecraft Gameplay</h3>
-                    <p>15 minutos de edición dinámica y entretenida.</p>
-                    <span class="video-tag tag-largo">Video Largo</span>
-                    <a class="video-link" href="https://www.youtube.com/watch?v=9P78RXwcFlY" target="_blank" rel="noopener">▶ Ver en YouTube</a>
+                    <h3 id="card4-title">Vtuber Minecraft Gameplay</h3>
+                    <p id="card4-desc">15 minutes of dynamic and entertaining editing.</p>
+                    <span id="card4-tag" class="video-tag tag-largo">Long Video</span>
+                    <a id="card4-link" class="video-link" href="https://www.youtube.com/watch?v=9P78RXwcFlY" target="_blank" rel="noopener">▶ Watch on YouTube</a>
                 </div>
             </div>
 
@@ -552,14 +592,14 @@
                 <div class="video-wrapper">
                     <div class="yt-thumb" data-id="dypaqTFIUqc">
                         <img src="https://i.ytimg.com/vi/dypaqTFIUqc/hqdefault.jpg" alt="Vtuber Valorant" loading="lazy">
-                        <button class="yt-play" aria-label="Reproducir"></button>
+                        <button class="yt-play" aria-label="Play"></button>
                     </div>
                 </div>
                 <div class="video-info">
-                    <h3>Vtuber Clip Valorant</h3>
-                    <p>Highlight dinámico y entretenido.</p>
-                    <span class="video-tag tag-corto">Video Corto</span>
-                    <a class="video-link" href="https://www.youtube.com/watch?v=dypaqTFIUqc" target="_blank" rel="noopener">▶ Ver en YouTube</a>
+                    <h3 id="card5-title">Vtuber Valorant Clip</h3>
+                    <p id="card5-desc">Dynamic and entertaining highlight.</p>
+                    <span id="card5-tag" class="video-tag tag-corto">Short Video</span>
+                    <a id="card5-link" class="video-link" href="https://www.youtube.com/watch?v=dypaqTFIUqc" target="_blank" rel="noopener">▶ Watch on YouTube</a>
                 </div>
             </div>
 
@@ -570,25 +610,25 @@
         <div class="gaming-bg"></div>
         <div class="hero-content">
             <h1>EDUARDO VARGAS</h1>
-            <p>Editor Profesional de Videos Gaming</p>
-            <p>21 años • 3 años de experiencia</p>
-            <a href="#contact" class="cta-button">Contáctame</a>
+            <p id="hero-subtitle">Professional Gaming Video Editor</p>
+            <p id="hero-meta">21 years old • 3 years of experience</p>
+            <a href="#contact" id="hero-cta" class="cta-button">Contact me</a>
         </div>
     </section>
 
     <div class="about-wrap">
         <section id="about">
             <div class="about-text">
-                <h2>Sobre mí</h2>
-                <p>Hola! Soy Eduardo Vargas, editor de videos gaming con 3 años de experiencia.</p>
-                <p>Me especializo en crear contenido dinámico y adictivo, tanto para videos largos como para clips cortos virales.</p>
-                <p>Experiencia en:</p>
+                <h2 id="about-title">About me</h2>
+                <p id="about-p1">Hi! I'm Eduardo Vargas, a gaming video editor with 3 years of experience.</p>
+                <p id="about-p2">I specialize in creating dynamic and addictive content, both for long-form videos and short viral clips.</p>
+                <p id="about-p3">Experience in:</p>
                 <ul>
-                    <li>Edición dinámica con transiciones fluidas</li>
-                    <li>Corrección de color cinematográfica</li>
-                    <li>Audio mixing y sound design</li>
-                    <li>Motion graphics y overlays gaming</li>
-                    <li>Optimización para YouTube y TikTok</li>
+                    <li id="about-li1">Dynamic editing with smooth transitions</li>
+                    <li id="about-li2">Cinematic color correction</li>
+                    <li id="about-li3">Audio mixing and sound design</li>
+                    <li id="about-li4">Motion graphics and gaming overlays</li>
+                    <li id="about-li5">Optimization for YouTube and TikTok</li>
                 </ul>
             </div>
         </section>
@@ -596,34 +636,34 @@
 
     <div class="services-wrap">
         <section id="services">
-            <h2>Servicios</h2>
-            <p style="text-align:center; color:#ccc; margin-bottom:2rem; font-size:1rem;">💬 <strong style="color:var(--primary)">Precios negociables</strong> — Hablamos y llegamos a un acuerdo según tu proyecto y presupuesto.</p>
+            <h2 id="services-title">Services</h2>
+            <p id="services-price" style="text-align:center; color:#ccc; margin-bottom:2rem; font-size:1rem;">💬 <strong style="color:var(--primary)">Negotiable pricing</strong> — Let's talk and agree on a deal that fits your project and budget.</p>
             <div class="services-grid">
                 <div class="service-card">
-                    <h3>🎮 Videos Largos</h3>
-                    <p>Gameplays completos, guías detalladas, let's plays y reviews con edición profesional.</p>
+                    <h3 id="svc1-title">🎮 Long Videos</h3>
+                    <p id="svc1-desc">Full gameplays, detailed guides, let's plays and reviews with professional editing.</p>
                 </div>
                 <div class="service-card">
-                    <h3>⚡ Videos Cortos</h3>
-                    <p>Clips virales, highlights, TikToks, Shorts y Reels para maximizar el alcance.</p>
+                    <h3 id="svc2-title">⚡ Short Videos</h3>
+                    <p id="svc2-desc">Viral clips, highlights, TikToks, Shorts and Reels to maximize reach.</p>
                 </div>
                 <div class="service-card">
-                    <h3>✨ Edición Premium</h3>
-                    <p>Corrección de color, efectos visuales, motion graphics y optimización SEO para YouTube.</p>
+                    <h3 id="svc3-title">✨ Premium Editing</h3>
+                    <p id="svc3-desc">Color correction, visual effects, motion graphics and SEO optimization for YouTube.</p>
                 </div>
             </div>
         </section>
     </div>
 
     <section id="contact" class="contact">
-        <h2>¿Listo para tu próximo video?</h2>
+        <h2 id="contact-title">Ready for your next video?</h2>
         <form action="https://formspree.io/f/xlgkvaba" method="POST">
-            <input type="text" name="nombre" placeholder="Tu nombre" required>
-            <input type="email" name="email" placeholder="Tu email" required>
-            <input type="tel" name="telefono" placeholder="Tu número de contacto" required>
-            <input type="text" name="proyecto" placeholder="Tipo de proyecto (Largo / Corto)">
-            <textarea name="mensaje" rows="6" placeholder="Cuéntame sobre tu proyecto..."></textarea>
-            <button type="submit" class="cta-button" style="width:100%; margin-top:1rem;">Enviar mensaje</button>
+            <input id="form-name" type="text" name="nombre" placeholder="Your name" required>
+            <input id="form-email" type="email" name="email" placeholder="Your email" required>
+            <input id="form-phone" type="tel" name="telefono" placeholder="Your contact number" required>
+            <input id="form-project" type="text" name="proyecto" placeholder="Project type (Long / Short)">
+            <textarea id="form-message" name="mensaje" rows="6" placeholder="Tell me about your project…"></textarea>
+            <button id="form-submit" type="submit" class="cta-button" style="width:100%; margin-top:1rem;">Send message</button>
         </form>
         <div class="contact-info">
             <div class="contact-item">
@@ -638,9 +678,11 @@
     </section>
 
     <footer>
-        <p>© Eduardo Vargas • Editor Profesional de Videos Gaming</p>
+        <p id="footer-text">© Eduardo Vargas • Professional Gaming Video Editor</p>
     </footer>
 
+    <!-- translations must load before init -->
+    <script src="translations.js"></script>
     <script>
         // YouTube click-to-play
         document.querySelectorAll('.yt-thumb').forEach(thumb => {
@@ -676,11 +718,8 @@
 
         // Portfolio filter
         function filterVideos(type, btn) {
-            // update active button
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
-            // show/hide cards
             document.querySelectorAll('.video-card').forEach(card => {
                 if (type === 'all' || card.dataset.type === type) {
                     card.classList.remove('hidden');
@@ -689,6 +728,9 @@
                 }
             });
         }
+
+        // Init language on page load
+        initLanguage();
     </script>
 </body>
 </html>
